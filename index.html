@@ -25,7 +25,7 @@
 <script type="text/javascript" src="js/jquery.isotope.js"></script>
 <script type="text/javascript" src="js/wow.js"></script>
 <script type="text/javascript" src="js/classie.js"></script>
-
+<link rel='stylesheet' href='css/nifty1.css'>
 
 <!--[if lt IE 9]>
     <script src="js/respond-1.1.0.min.js"></script>
@@ -95,8 +95,8 @@
 
 <section class="main-section" id="service"><!--main-section-start-->
 	<div class="container">
-    	<h2>Services</h2>
-    	<h6>We offer exceptional service with complimentary hugs.</h6>
+    	<h2>Our Products</h2>
+        <h6>These are some of our products which you want to try</h6>
         <div class="row">
         	<div class="col-lg-4 col-sm-6 wow fadeInLeft delay-05s">
             	<div class="service-list">
@@ -139,7 +139,8 @@
                 </div>
             </div>
 
-            <figure class="col-lg-8 col-sm-6  text-right wow fadeInUp delay-02s">
+            <figure class="col-lg-8 col-sm-6  text-center wow fadeInUp delay-02s">
+            <h4> These are products choose from one which suits you best</h4>
             	<img src="img/macbook-pro.png" alt="">
             </figure>
         
@@ -230,7 +231,17 @@
             <h6><p> Please refer us at given address</p></h6>
             <h6><p> Or you can fill our <b>contact form</b> by clicking button below</p></h6>
             <h6></h6>               	
-                    <h6><a href="http://eepurl.com/bMHb5n"><input class="input-btn" type="submit" value="Our Contact form"></a></h6>
+                    <h6><button class='btn btn-primary' data-trigger='modal' data-target='#modal-1'>Our Contact Form</button>
+
+        <div class="nifty-modal fade-in-scale" id="modal-1">
+            <div class="md-content">
+                
+                <div class='md-body'>
+                    <iframe src="https://docs.google.com/forms/d/1ZwBTyFhA4tryvIqDKFRUOqZlBLXgsUJ-E5T7vCEP6h0/viewform?embedded=true" width="570" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+                    <button class="btn btn-primary md-close">Close </button>
+                </div>
+            </div>
+        </div></h6>
                 	
             </div>
         </div>
@@ -343,5 +354,17 @@ $(window).load(function(){
 });
 
 </script>
+<script src='https://code.jquery.com/jquery-2.1.3.min.js'></script>
+        <script src='js/nifty.js'></script>
+
+        <script>
+            function handleNiftyEvent(event) {
+                console.log(event)
+            }
+            $("#modal-1").on("show.nifty.modal", handleNiftyEvent)
+            $("#modal-1").on("shown.nifty.modal", handleNiftyEvent)
+            $("#modal-1").on("hide.nifty.modal", handleNiftyEvent)
+            $("#modal-1").on("hidden.nifty.modal", handleNiftyEvent)
+        </script>
 </body>
 </html>
