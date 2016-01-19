@@ -141,3 +141,36 @@
 	transform: scale(1) rotate(0deg);
 	opacity: 1;
 }
+/* Effect 16:  Blur */
+.md-show.fade-in-blur ~ .md-overlay {
+	background: rgba(180,46,32,0.5);
+}
+
+.md-show.fade-in-blur ~ .container {
+	-webkit-filter: blur(3px);
+	-moz-filter: blur(3px);
+	filter: blur(3px);
+}
+
+.fade-in-blur .md-content {
+	-webkit-transform: translateY(-5%);
+	-moz-transform: translateY(-5%);
+	-ms-transform: translateY(-5%);
+	transform: translateY(-5%);
+	opacity: 0;
+}
+
+.md-show.fade-in-blur ~ .container,
+.fade-in-blur .md-content {
+	-webkit-transition: all 0.3s;
+	-moz-transition: all 0.3s;
+	transition: all 0.3s;
+}
+
+.md-show.fade-in-blur .md-content {
+	-webkit-transform: translateY(0);
+	-moz-transform: translateY(0);
+	-ms-transform: translateY(0);
+	transform: translateY(0);
+	opacity: 1;
+}

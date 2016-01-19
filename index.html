@@ -35,7 +35,7 @@
 
 
 </head>
-<body>
+<body oncontextmenu="return false">
 <div style="overflow:hidden;">
 <header class="header" id="header"><!--header-start-->
 	<div class="container">
@@ -250,7 +250,8 @@
 <footer class="footer">
     <div class="container">
         <div class="footer-logo"><a href="#"><img src="img/footer-logo.png" alt=""></a></div>
-        <span class="copyright">©Eazy-I-Net Services pvt. ltd. All Rights Reserved.</span> <h6><p> Powered By <a href="http://worldphone.in/"> World Phone</a></p> </h6>
+        <span class="copyright">©Eazy-I-Net Services pvt. ltd. All Rights Reserved.</span> 
+        <h6><p> Supported By <a href="http://worldphone.in/"> World Phone</a></p> </h6>
     </div>
     <!-- 
         All links in the footer should remain intact. 
@@ -366,5 +367,17 @@ $(window).load(function(){
             $("#modal-1").on("hide.nifty.modal", handleNiftyEvent)
             $("#modal-1").on("hidden.nifty.modal", handleNiftyEvent)
         </script>
+        <script language="javascript">
+document.onmousedown=disableclick;
+status="Right Click Disabled";
+function disableclick(event)
+{
+  if(event.button==2)
+   {
+     alert(status);
+     return false;    
+   }
+}
+</script>
 </body>
 </html>
