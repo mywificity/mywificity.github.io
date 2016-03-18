@@ -1,6 +1,7 @@
-# "Cardio" One Page Website Template
+# "My Wifi City" template
+A City Wide wireless broadband service
 
-"Cardio" is a one page website template made by [PHIr](http://www.phir.co/) exclusively for Codrops.
+"Cardio" is a one page website template for [My Wifi City](http://www.mywificity.com/) exclusively from  Codrops.
 
 [Download on Codrops](http://tympanus.net/codrops/?p=24301)
 
