@@ -1,171 +1,233 @@
-jQuery(function($) {
-	"use strict";
-	// Author Code Here
+jQuery(function($) {'use strict';
 
-	var owlPricing;
-	var ratio = 2;
+	// Navigation Scroll
+	$(window).scroll(function(event) {
+		Scroll();
+	});
 
-	// Window Load
-	$(window).load(function() {
-		// Preloader
-		$('.intro-tables, .parallax, header').css('opacity', '0');
-		$('.preloader').addClass('animated fadeOut').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-			$('.preloader').hide();
-			$('.parallax, header').addClass('animated fadeIn').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-				$('.intro-tables').addClass('animated fadeInUp').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend');
+	$('.navbar-collapse ul li a').on('click', function() {  
+		$('html, body').animate({scrollTop: $(this.hash).offset().top - 5}, 1000);
+		return false;
+	});
+
+	// User define function
+	function Scroll() {
+		var contentTop      =   [];
+		var contentBottom   =   [];
+		var winTop      =   $(window).scrollTop();
+		var rangeTop    =   200;
+		var rangeBottom =   500;
+		$('.navbar-collapse').find('.scroll a').each(function(){
+			contentTop.push( $( $(this).attr('href') ).offset().top);
+			contentBottom.push( $( $(this).attr('href') ).offset().top + $( $(this).attr('href') ).height() );
+		})
+		$.each( contentTop, function(i){
+			if ( winTop > contentTop[i] - rangeTop ){
+				$('.navbar-collapse li.scroll')
+				.removeClass('active')
+				.eq(i).addClass('active');			
+			}
+		})
+	};
+
+	$('#tohash').on('click', function(){
+		$('html, body').animate({scrollTop: $(this.hash).offset().top - 5}, 1000);
+		return false;
+	});
+
+	// accordian
+	$('.accordion-toggle').on('click', function(){
+		$(this).closest('.panel-group').children().each(function(){
+		$(this).find('>.panel-heading').removeClass('active');
+		 });
+
+	 	$(this).closest('.panel-heading').toggleClass('active');
+	});
+
+	//Slider
+	$(document).ready(function() {
+		var time = 7; // time in seconds
+
+	 	var $progressBar,
+	      $bar, 
+	      $elem, 
+	      isPause, 
+	      tick,
+	      percentTime;
+	 
+	    //Init the carousel
+	    $("#main-slider").find('.owl-carousel').owlCarousel({
+	      slideSpeed : 500,
+	      paginationSpeed : 500,
+	      singleItem : true,
+	      navigation : true,
+			navigationText: [
+			"<i class='fa fa-angle-left'></i>",
+			"<i class='fa fa-angle-right'></i>"
+			],
+	      afterInit : progressBar,
+	      afterMove : moved,
+	      startDragging : pauseOnDragging,
+	      //autoHeight : true,
+	      transitionStyle : "fadeUp"
+	    });
+	 
+	    //Init progressBar where elem is $("#owl-demo")
+	    function progressBar(elem){
+	      $elem = elem;
+	      //build progress bar elements
+	      buildProgressBar();
+	      //start counting
+	      start();
+	    }
+	 
+	    //create div#progressBar and div#bar then append to $(".owl-carousel")
+	    function buildProgressBar(){
+	      $progressBar = $("<div>",{
+	        id:"progressBar"
+	      });
+	      $bar = $("<div>",{
+	        id:"bar"
+	      });
+	      $progressBar.append($bar).appendTo($elem);
+	    }
+	 
+	    function start() {
+	      //reset timer
+	      percentTime = 0;
+	      isPause = false;
+	      //run interval every 0.01 second
+	      tick = setInterval(interval, 10);
+	    };
+	 
+	    function interval() {
+	      if(isPause === false){
+	        percentTime += 1 / time;
+	        $bar.css({
+	           width: percentTime+"%"
+	         });
+	        //if percentTime is equal or greater than 100
+	        if(percentTime >= 100){
+	          //slide to next item 
+	          $elem.trigger('owl.next')
+	        }
+	      }
+	    }
+	 
+	    //pause while dragging 
+	    function pauseOnDragging(){
+	      isPause = true;
+	    }
+	 
+	    //moved callback
+	    function moved(){
+	      //clear interval
+	      clearTimeout(tick);
+	      //start again
+	      start();
+	    }
+	});
+
+	//Initiat WOW JS
+	new WOW().init();
+	//smoothScroll
+	smoothScroll.init();
+
+	// portfolio filter
+	$(window).load(function(){'use strict';
+		var $portfolio_selectors = $('.portfolio-filter >li>a');
+		var $portfolio = $('.portfolio-items');
+		$portfolio.isotope({
+			itemSelector : '.portfolio-item',
+			layoutMode : 'fitRows'
+		});
+		
+		$portfolio_selectors.on('click', function(){
+			$portfolio_selectors.removeClass('active');
+			$(this).addClass('active');
+			var selector = $(this).attr('data-filter');
+			$portfolio.isotope({ filter: selector });
+			return false;
+		});
+	});
+
+	$(document).ready(function() {
+		//Animated Progress
+		$('.progress-bar').bind('inview', function(event, visible, visiblePartX, visiblePartY) {
+			if (visible) {
+				$(this).css('width', $(this).data('width') + '%');
+				$(this).unbind('inview');
+			}
+		});
+
+		//Animated Number
+		$.fn.animateNumbers = function(stop, commas, duration, ease) {
+			return this.each(function() {
+				var $this = $(this);
+				var start = parseInt($this.text().replace(/,/g, ""));
+				commas = (commas === undefined) ? true : commas;
+				$({value: start}).animate({value: stop}, {
+					duration: duration == undefined ? 1000 : duration,
+					easing: ease == undefined ? "swing" : ease,
+					step: function() {
+						$this.text(Math.floor(this.value));
+						if (commas) { $this.text($this.text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")); }
+					},
+					complete: function() {
+						if (parseInt($this.text()) !== stop) {
+							$this.text(stop);
+							if (commas) { $this.text($this.text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,")); }
+						}
+					}
+				});
 			});
-		});
+		};
 
-		// Header Init
-		if ($(window).height() > $(window).width()) {
-			var ratio = $('.parallax').width() / $('.parallax').height();
-			$('.parallax img').css('height', ($(window).height()) + 'px');
-			$('.parallax img').css('width', $('.parallax').height() * ratio + 'px');
-		}
-
-		$('header').height($(window).height() + 80);
-		$('section .cut').each(function() {
-			if ($(this).hasClass('cut-top'))
-				$(this).css('border-right-width', $(this).parent().width() + "px");
-			else if ($(this).hasClass('cut-bottom'))
-				$(this).css('border-left-width', $(this).parent().width() + "px");
-		});
-
-		// Sliders Init
-		$('.owl-schedule').owlCarousel({
-			singleItem: true,
-			pagination: true
-		});
-		$('.owl-testimonials').owlCarousel({
-			singleItem: true,
-			pagination: true
-		});
-		$('.owl-twitter').owlCarousel({
-			singleItem: true,
-			pagination: true
-		});
-
-		// Navbar Init
-		$('nav').addClass('original').clone().insertAfter('nav').addClass('navbar-fixed-top').css('position', 'fixed').css('top', '0').css('margin-top', '0').removeClass('original');
-		$('.mobile-nav ul').html($('nav .navbar-nav').html());
-		$('nav.navbar-fixed-top .navbar-brand img').attr('src', $('nav.navbar-fixed-top .navbar-brand img').data("active-url"));
-
-		// Typing Intro Init
-		$(".typed").typewriter({
-			speed: 60
-		});
-
-		// Popup Form Init
-		var i = 0;
-		var interval = 0.15;
-		$('.popup-form .dropdown-menu li').each(function() {
-			$(this).css('animation-delay', i + "s");
-			i += interval;
-		});
-		$('.popup-form .dropdown-menu li a').click(function(event) {
-			event.preventDefault();
-			$(this).parent().parent().prev('button').html($(this).html());
-		});
-
-		// Onepage Nav
-		$('.navbar.navbar-fixed-top .navbar-nav').onePageNav({
-			currentClass: 'active',
-			changeHash: false,
-			scrollSpeed: 400,
-			filter: ':not(.btn)'
-		});
-	});
-	// Window Scroll
-	function onScroll() {
-		if ($(window).scrollTop() > 50) {
-			$('nav.original').css('opacity', '0');
-			$('nav.navbar-fixed-top').css('opacity', '1');
-		} else {
-			$('nav.original').css('opacity', '1');
-			$('nav.navbar-fixed-top').css('opacity', '0');
-		}
-	}
-
-	window.addEventListener('scroll', onScroll, false);
-
-	// Window Resize
-	$(window).resize(function() {
-		$('header').height($(window).height());
-	});
-
-	// Pricing Box Click Event
-	$('.pricing .box-main').click(function() {
-		$('.pricing .box-main').removeClass('active');
-		$('.pricing .box-second').removeClass('active');
-		$(this).addClass('active');
-		$(this).next($('.box-second')).addClass('active');
-		$('#pricing').css("background-image", "url(" + $(this).data('img') + ")");
-		$('#pricing').css("background-size", "cover");
-	});
-
-	// Mobile Nav
-	$('body').on('click', 'nav .navbar-toggle', function() {
-		event.stopPropagation();
-		$('.mobile-nav').addClass('active');
-	});
-
-	$('body').on('click', '.mobile-nav a', function(event) {
-		$('.mobile-nav').removeClass('active');
-		if(!this.hash) return;
-		event.preventDefault();
-		if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-			event.stopPropagation();
-			var target = $(this.hash);
-			target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-			if (target.length) {
-				$('html,body').animate({
-					scrollTop: target.offset().top
-				}, 1000);
-				return false;
+		$('.animated-number').bind('inview', function(event, visible, visiblePartX, visiblePartY) {
+			var $this = $(this);
+			if (visible) {
+				$this.animateNumbers($this.data('digit'), false, $this.data('duration')); 
+				$this.unbind('inview');
 			}
-		}
+		});
 	});
 
-	$('body').on('click', '.mobile-nav a.close-link', function(event) {
-		$('.mobile-nav').removeClass('active');
+	// Contact form
+	var form = $('#main-contact-form');
+	form.submit(function(event){
 		event.preventDefault();
-	});
-
-	$('body').on('click', 'nav.original .navbar-nav a:not([data-toggle])', function() {
-		if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-			event.stopPropagation();
-			var target = $(this.hash);
-			target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-			if (target.length) {
-				$('html,body').animate({
-					scrollTop: target.offset().top
-				}, 1000);
-				return false;
+		var form_status = $('<div class="form_status"></div>');
+		$.ajax({
+			url: $(this).attr('action'),
+			beforeSend: function(){
+				form.prepend( form_status.html('<p><i class="fa fa-spinner fa-spin"></i> Email is sending...</p>').fadeIn() );
 			}
-		}
+		}).done(function(data){
+			form_status.html('<p class="text-success">Thank you for contact us. As early as possible  we will contact you</p>').delay(3000).fadeOut();
+		});
 	});
 
-	function centerModal() {
-		$(this).css('display', 'block');
-		var $dialog = $(this).find(".modal-dialog"),
-			offset = ($(window).height() - $dialog.height()) / 2,
-			bottomMargin = parseInt($dialog.css('marginBottom'), 10);
+	//Pretty Photo
+	$("a[rel^='prettyPhoto']").prettyPhoto({
+		social_tools: false
+	});
 
-		// Make sure you don't hide the top part of the modal w/ a negative margin
-		// if it's longer than the screen height, and keep the margin equal to 
-		// the bottom margin of the modal
-		if (offset < bottomMargin) offset = bottomMargin;
-		$dialog.css("margin-top", offset);
+	//Google Map
+	var latitude = $('#google-map').data('latitude');
+	var longitude = $('#google-map').data('longitude');
+	function initialize_map() {
+		var myLatlng = new google.maps.LatLng(latitude,longitude);
+		var mapOptions = {
+			zoom: 14,
+			scrollwheel: false,
+			center: myLatlng
+		};
+		var map = new google.maps.Map(document.getElementById('google-map'), mapOptions);
+		var marker = new google.maps.Marker({
+			position: myLatlng,
+			map: map
+		});
 	}
+	google.maps.event.addDomListener(window, 'load', initialize_map);
 
-	$('.modal').on('show.bs.modal', centerModal);
-
-	$('.modal-popup .close-link').click(function(event){
-		event.preventDefault();
-		$('#modal1').modal('hide');
-	});
-
-	$(window).on("resize", function() {
-		$('.modal:visible').each(centerModal);
-	});
 });
